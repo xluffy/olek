@@ -46,6 +46,7 @@ jobs:
           context: .
           file: Dockerfile
           tag: latest
+          push: true
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
