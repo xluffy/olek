@@ -5,6 +5,10 @@ on:
     branches:
       - master
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -26,7 +30,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/xluffy/olek
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: latest=true
           tags: |
             type=ref,event=branch
@@ -47,5 +51,5 @@ jobs:
           platforms: linux/amd64
           file: Dockerfile
           push: true
-          tags: |
-            ghcr.io/xluffy/olek:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
