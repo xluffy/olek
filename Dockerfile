@@ -2,6 +2,7 @@
 
 FROM ubuntu:22.04
 LABEL maintainer="Quang V. Nguyen <quang@2meo.com>"
+LABEL org.opencontainers.image.description "Base Image"
 
 RUN \
   apt-get update && \
@@ -12,6 +13,7 @@ RUN \
   automake \
   bash-completion \
   build-essential \
+  ca-certificates \
   curl \
   gcc \
   git \
