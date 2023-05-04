@@ -1,0 +1,91 @@
+# syntax=docker/dockerfile:experimental
+
+FROM ubuntu:22.04 AS builder
+LABEL maintainer="Quang V. Nguyen <quang@2meo.com>"
+LABEL org.opencontainers.image.description "Builder Image"
+
+ENV NGINX_VERSION 1.24.0
+ENV HEADER_VERSION 0.34
+ENV ECHO_VERSION 0.63
+
+RUN \
+  apt-get update && \
+  RUNLEVEL=1 DEBIAN_FRONTEND=noninteractive \
+  apt-get install -y --no-install-recommends \
+  aptitude \
+  autoconf \
+  automake \
+  bash-completion \
+  build-essential \
+  ca-certificates \
+  curl \
+  gcc \
+  git \
+  git-core \
+  iputils-ping \
+  jq \
+  net-tools \
+  openssl-dev \
+  pkg-config \
+  python3-pip \
+  python3-setuptools \
+  rsync \
+  telnet \
+  tree \
+  tzdata \
+  vim \
+  wget \
+  zip \
+  zlib1g-dev && \
+  find /usr/local -depth \
+  \( \
+  \( -type d -a -name test -o -name tests \) \
+  -o \
+  \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
+  \) -exec rm -rf '{}' +;
+
+RUN \
+   mkdir -pv /usr/src/build/modules && \
+   wget -O /usr/src/build/nginx.tar.gz "http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz" && \
+   wget -O /usr/src/build/modules/headers-more-nginx-module.tar.gz "https://github.com/openresty/headers-more-nginx-module/archive/refs/tags/v${HEADER_VERSION}.tar.gz" && \
+   wget -O /usr/src/build/modules/echo-nginx-module.tar.gz "https://github.com/openresty/echo-nginx-module/archive/refs/tags/v${ECHO_VERSION}.tar.gz" && \
+   cd /usr/src/build/modules && tar -xvf headers-more-nginx-module.tar.gz && tar -xvf echo-nginx-module.tar.gz && \
+   cd /usr/src/build && tar -xvf nginx.tar.gz && \
+   cd "/usr/src/build/nginx-${NGINX_VERSION}" && \
+  ./configure --sbin-path=/usr/sbin/nginx \
+    --conf-path=/etc/nginx/nginx.conf \
+    --http-log-path=/var/log/nginx/access.log \
+    --error-log-path=/var/log/nginx/error.log \
+    --lock-path=/var/lock/nginx.lock \
+    --pid-path=/var/run/nginx.pid \
+    --http-client-body-temp-path=/var/lib/nginx/body \
+    --http-fastcgi-temp-path=/var/lib/nginx/fastcgi \
+    --http-proxy-temp-path=/var/lib/nginx/proxy \
+    --http-scgi-temp-path=/var/lib/nginx/scgi \
+    --http-uwsgi-temp-path=/var/lib/nginx/uwsgi \
+    --with-cc-opt="-O2 -DNGX_LUA_ABORT_AT_PANIC" \
+    --with-ld-opt="-Wl,-rpath,/usr/local/lib" \
+    --with-openssl-opt=no-'nextprotoneg enable-ec_nistp_64_gcc_128 enable-tls1_3' \
+    --with-pcre-jit \
+    --with-pcre \
+    --with-http_ssl_module \
+    --with-http_stub_status_module \
+    --with-http_realip_module \
+    --with-http_gzip_static_module \
+    --with-http_sub_module \
+    --without-mail_pop3_module \
+    --without-mail_imap_module \
+    --without-mail_smtp_module \
+    --with-http_v2_module \
+    --with-http_geoip_module \
+    --user=nginx \
+    --group=nginx \
+    --add-module="/usr/src/build/modules/headers-more-nginx-module-${HEADER_VERSION}" \
+    --add-module="/usr/src/build/modules/echo-nginx-module-${ECHO_VERSION}" && \
+    make && make install
+
+FROM ubuntu:22.04 AS nginx
+LABEL maintainer="Quang V. Nguyen <quang@2meo.com>"
+LABEL org.opencontainers.image.description "NGINX Image"
+
+COPY --from=builder /usr/sbin/nginx /usr/sbin/nginx
