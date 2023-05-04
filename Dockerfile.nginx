@@ -25,7 +25,7 @@ RUN \
   iputils-ping \
   jq \
   net-tools \
-  openssl-dev \
+  libssl-dev \
   pkg-config \
   python3-pip \
   python3-setuptools \
