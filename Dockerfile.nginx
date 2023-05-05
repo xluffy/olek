@@ -110,3 +110,17 @@ LABEL maintainer="Quang V. Nguyen <quang@2meo.com>"
 LABEL org.opencontainers.image.description "NGINX Image"
 
 COPY --from=builder /usr/sbin/nginx /usr/sbin/nginx
+COPY --from=builder /etc/nginx /etc/nginx
+
+RUN \
+  mkdir -pv /etc/nginx/{default.d,conf.d,security.d} && \
+  mv /etc/nginx/*.default /etc/nginx/default.d && \
+  groupadd -r nginx && useradd --no-log-init -r -g nginx nginx
+
+COPY etc/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+COPY etc/nginx/security.d/sid.conf /etc/nginx/security.d/sid.conf
+
+EXPOSE 80
+STOPSIGNAL SIGTERM
+CMD ["nginx", "-g", "daemon off;"]
