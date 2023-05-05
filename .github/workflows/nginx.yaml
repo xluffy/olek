@@ -11,7 +11,7 @@ env:
 
 jobs:
   nginx:
-    name: "Build base-image and push to ghcr.io"
+    name: "Build NGINX image and push to ghcr.io"
     runs-on: ubuntu-latest
     permissions:
       packages: write
