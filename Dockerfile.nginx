@@ -113,6 +113,7 @@ COPY --from=builder /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=builder /etc/nginx /etc/nginx
 
 RUN \
+  groupadd -r nginx && useradd --no-log-init -r -g nginx nginx && \
   apt-get update && \
   RUNLEVEL=1 DEBIAN_FRONTEND=noninteractive \
   apt-get install -y --no-install-recommends \
@@ -138,11 +139,11 @@ RUN \
   linux-tools-$(uname -r) \
   linux-tools-common \
   linux-tools-generic && \
-  mkdir -pv /etc/nginx/default.d && \
-  mkdir -pv /etc/nginx/conf.d && \
-  mkdir -pv /etc/nginx/security.d && \
+  mkdir -pv /etc/nginx/{default.d,conf.d,security.d} && \
   mv /etc/nginx/*.default /etc/nginx/default.d && \
-  groupadd -r nginx && useradd --no-log-init -r -g nginx nginx
+  mkdir -pv /var/log/nginx && \
+  mkdir -pv /var/lib/nginx/{body,fastcgi,proxy,scgi,uwsgi} && \
+  chown -R nginx:nginx /var/log/nginx /var/lib/nginx
 
 COPY etc/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
