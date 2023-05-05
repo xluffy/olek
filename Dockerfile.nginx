@@ -113,6 +113,31 @@ COPY --from=builder /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=builder /etc/nginx /etc/nginx
 
 RUN \
+  apt-get update && \
+  RUNLEVEL=1 DEBIAN_FRONTEND=noninteractive \
+  apt-get install -y --no-install-recommends \
+  libacl1-dev \
+  libaio1 \
+  libaio-dev \
+  libbz2-dev \
+  libcurl4-openssl-dev \
+  libevent-dev \
+  libffi-dev \
+  liblzo2-dev \
+  libmcrypt-dev \
+  libncurses5-dev \
+  libssl-dev \
+  libpcre3 \
+  libpcre3-dev \
+  libxml2-dev \
+  libxmlsec1-dev \
+  libtool \
+  libyaml-dev \
+  libgeoip-dev \
+  libmaxminddb0 \
+  linux-tools-$(uname -r) \
+  linux-tools-common \
+  linux-tools-generic && \
   mkdir -pv /etc/nginx/default.d && \
   mkdir -pv /etc/nginx/conf.d && \
   mkdir -pv /etc/nginx/security.d && \
