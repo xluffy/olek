@@ -25,7 +25,22 @@ RUN \
   iputils-ping \
   jq \
   net-tools \
+  libacl1-dev \
+  libaio1 \
+  libaio-dev \
+  libbz2-dev \
+  libcurl4-openssl-dev \
+  libevent-dev \
+  libffi-dev \
+  liblzo2-dev \
+  libmcrypt-dev \
+  libncurses5-dev \
   libssl-dev \
+  libpcre3 \
+  libpcre3-dev \
+  libxml2-dev \
+  libxmlsec1-dev \
+  libyaml-dev \
   pkg-config \
   python3-pip \
   python3-setuptools \
