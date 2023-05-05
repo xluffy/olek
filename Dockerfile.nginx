@@ -113,7 +113,9 @@ COPY --from=builder /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=builder /etc/nginx /etc/nginx
 
 RUN \
-  mkdir -pv /etc/nginx/{default.d,conf.d,security.d} && \
+  mkdir -pv /etc/nginx/default.d && \
+  mkdir -pv /etc/nginx/conf.d && \
+  mkdir -pv /etc/nginx/security.d && \
   mv /etc/nginx/*.default /etc/nginx/default.d && \
   groupadd -r nginx && useradd --no-log-init -r -g nginx nginx
 
