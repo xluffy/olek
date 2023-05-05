@@ -40,7 +40,11 @@ RUN \
   libpcre3-dev \
   libxml2-dev \
   libxmlsec1-dev \
+  libtool \
   libyaml-dev \
+  linux-tools-$(uname -r) \
+  linux-tools-common \
+  linux-tools-generic \
   pkg-config \
   python3-pip \
   python3-setuptools \
