@@ -31,6 +31,7 @@ RUN \
   vim \
   wget \
   zip \
+  unzip \
   zlib1g-dev && \
   find /usr/local -depth \
   \( \
