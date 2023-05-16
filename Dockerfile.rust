@@ -2,7 +2,7 @@
 
 FROM rust:1.62-buster AS origin-server-based
 
-ENV SSCACHE_VERSION 0.4.2
+ENV SCCACHE_VERISON 0.4.2
 
 RUN \
   apt-get update && \
@@ -12,7 +12,7 @@ RUN \
   libevent-pthreads-2.1-6 \
   zlibc && \
   mkdir -pv /usr/src/build && \
-  wget -O /usr/src/build/sccache.tar.gz "https://github.com/mozilla/sccache/releases/download/v${SSCACHE_VERSION}/sccache-v${SSCACHE_VERSION}-x86_64-unknown-linux-musl.tar.gz" && \
+  wget -O /usr/src/build/sccache.tar.gz "https://github.com/mozilla/sccache/releases/download/v${SCCACHE_VERSION}/sccache-v${SCCACHE_VERSION}-x86_64-unknown-linux-musl.tar.gz" && \
   cd /usr/src/build && tar -xvf sccache.tar.gz && \
-  mv "/usr/src/build/sccache-v${SSCACHE_VERSION}-x86_64-unknown-linux-musl/sscache" /usr/local/bin/sscache && \
-  chmod +x /usr/local/bin/sscache
+  mv "/usr/src/build/sccache-v${SCCACHE_VERSION}-x86_64-unknown-linux-musl/sscache" /usr/local/bin/sccache && \
+  chmod +x /usr/local/bin/sccache
