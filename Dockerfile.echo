@@ -2,7 +2,7 @@
 FROM golang:1.20-buster AS builder
 ENV GO111MODULE=on
 
-WORKDIR /src
+WORKDIR /src/api
 
 COPY src /src
 RUN go mod download
