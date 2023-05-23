@@ -41,7 +41,7 @@ jobs:
         with:
           context: .
           platforms: linux/amd64
-          file: src/api/Dockerfile
+          file: Dockerfile.echo
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
