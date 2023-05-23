@@ -21,6 +21,6 @@ RUN apt-get update && \
 RUN update-ca-certificates
 COPY --from=builder /src/svc /svc
 
-COPY ./entrypoint.sh /svc
+COPY src/api/entrypoint.sh /svc
 
 ENTRYPOINT ["bash", "./entrypoint.sh"]
