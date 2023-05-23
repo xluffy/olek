@@ -19,7 +19,7 @@ RUN apt-get update && \
   apt-get install -y --no-install-recommends ca-certificates
 
 RUN update-ca-certificates
-COPY --from=builder /src/svc /svc
+COPY --from=builder /src/api/svc /svc
 
 COPY src/api/entrypoint.sh /svc
 
